@@ -62,8 +62,8 @@ aMacintoshSe30I:dc.b 'Macintosh SE/30 Internal Video',0
 		move.b	(a0),$31(a1)
 		clr.b	$33(a1)
 		move.b	#$A0,$32(a1)
-		movea.l	a1,a0
-		moveq	#$31,d0
+		movea.l	a1,a0		; A0 - Address of the parameter block
+		moveq	#$31,d0     ; SDeleteSRTRec
 		_SlotManager
 		adda.w	#$38,sp
 		movea.l	($1D4).w,a0	; lo-mem global	of 6522	VIA chip
@@ -291,7 +291,7 @@ loc_FEFF0216:				; CODE XREF: ROM:FEFF0206j
 		_DisposeHandle
 
 loc_FEFF021C:				; CODE XREF: ROM:FEFF01F8j
-		moveq	#$FFFFFFE9,d0
+		moveq	#$FFFFFFE9,d0	; "-22"?
 		bra.s	locret_FEFF0214
 ; ---------------------------------------------------------------------------
 		movem.l	d4/a0-a1/a3-a4,-(sp)
@@ -362,7 +362,7 @@ loc_FEFF02B0:				; CODE XREF: ROM:FEFF02A4j
 sub_FEFF02B4:				; CODE XREF: ROM:loc_FEFF02B0p
 					; ROM:FEFF0306p
 		move.b	$28(a1),d0
-		movea.l	($1D4).w,a2
+		movea.l	($1D4).w,a2	; VIA base	
 		bset	#6,(a2)
 		movea.l	6(a3),a0
 		_SIntRemove
@@ -376,20 +376,21 @@ sub_FEFF02B4:				; CODE XREF: ROM:loc_FEFF02B0p
 
 sub_FEFF02CA:				; CODE XREF: ROM:FEFF0202p
 					; ROM:FEFF02A6p
-		lea	loc_FEFF0420,a2	; VIA1 base
-		moveq	#$10,d0
-		_NewPtrSysClear
-		bne.s	loc_FEFF02FC
-		move.w	#6,4(a0)
-		move.l	a2,8(a0)
-		movea.l	$2A(a1),a2
-		move.l	a2,$C(a0)
-		move.b	$28(a1),d0
-		_SIntInstall
+		lea	loc_FEFF0420,a2	; 
+		moveq	#$10,d0		; allocate 16 bytes, 
+		_NewPtrSysClear		; in the system heap, prezeroed 
+		bne.s	loc_FEFF02FC ; exit(1) if not 0
+		; Building a Slot Queue Element 
+		move.w	#6,4(a0)	; $00000006 - Prio
+		move.l	a2,8(a0)	; Address of VBLtaskHandler
+		movea.l	$2A(a1),a2	; handle to a driver device control entry
+		move.l	a2,$C(a0)	; 
+		move.b	$28(a1),d0	; d0 = slot number
+		_SIntInstall		; install an interrupt handler in the slot interrupt queue for a designated slot
 		bne.s	loc_FEFF02FA
-		movea.l	($1D4).w,a2
-		bclr	#6,(a2)
-		cmp.b	d0,d0
+		movea.l	($1D4).w,a2	; VIA1 base
+		bclr	#6,(a2)		; enable vSyncEnA
+		cmp.b	d0,d0	; set zero flag
 		rts
 ; ---------------------------------------------------------------------------
 
@@ -496,7 +497,7 @@ loc_FEFF03BC:				; CODE XREF: ROM:FEFF03B8j
 sub_FEFF03C2:				; CODE XREF: ROM:FEFF020Ep
 					; ROM:FEFF0268p ...
 		movem.l	d0/a0,-(sp)
-		movea.l	($1D4).w,a0
+		movea.l	($1D4).w,a0 ; VIA base
 		bset	#6,$600(a0)
 		adda.w	#$1E00,a0
 		move.w	d0,(a3)
