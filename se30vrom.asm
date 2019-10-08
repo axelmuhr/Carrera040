@@ -300,13 +300,17 @@ loc_FEFF021C:				; CODE XREF: ROM:FEFF01F8j
 		movea.l	([$14,a1]),a3
 		cmpi.w	#7,d0
 		bhi.s	loc_FEFF024E+2
-		move.w	loc_FEFF0240(pc,d0.w*2),d0
-		jmp	loc_FEFF0240(pc,d0.w)
+		move.w	word_FEFF0240(pc,d0.w*2),d0
+		jmp	word_FEFF0240(pc,d0.w)
 
-loc_FEFF0240:				; DATA XREF: ROM:FEFF0238r
-		ori.b	#$14,(a6)+
-		ori.b	#$10,($10).w	; not sure about this... likely	to be data
-		ori.w	#$10,(a6)
+ word_FEFF0240:  
+		dc.w $1E                ; DATA XREF: ROM:FEFF0238r
+        dc.w $14
+        dc.w $38
+        dc.w $10
+        dc.w $10
+        dc.w $56
+        dc.w $10
 
 loc_FEFF024E:				; CODE XREF: ROM:FEFF0236j
 					; ROM:FEFF027Cj ...
@@ -327,7 +331,7 @@ loc_FEFF0256:				; CODE XREF: ROM:FEFF0252j
 		move.w	d0,6(a2)
 		bsr.w	sub_FEFF03C2
 		move.l	2(a3),8(a2)
-		bsr.w	sub_FEFF03F8
+		bsr.w	sub_scrGrey
 		bra.s	loc_FEFF0254
 ; ---------------------------------------------------------------------------
 		cmpi.w	#$80,(a2)
@@ -340,7 +344,7 @@ loc_FEFF0256:				; CODE XREF: ROM:FEFF0252j
 		move.l	2(a3),8(a2)
 		bra.s	loc_FEFF0254
 ; ---------------------------------------------------------------------------
-		bsr.w	sub_FEFF03F8
+		bsr.w	sub_scrGrey
 		bra.s	loc_FEFF0254
 ; ---------------------------------------------------------------------------
 		move.b	(a2),d0
@@ -447,12 +451,12 @@ loc_FEFF0348:				; CODE XREF: ROM:FEFF0344j
 		tst.l	(a2)
 		beq.s	loc_FEFF0340+2
 		subq.w	#4,sp
-		_GetCTSeed
+		_GetCTSeed		; We're building a QT colortable here
 		movea.l	(a2),a0
 		move.l	(sp)+,(a0)+
 		move.l	#$80000001,(a0)+
 		move.l	#$FFFF,(a0)+
-		move.l	($A06).w,(a0)+
+		move.l	($A06).w,(a0)+	; 'MinusOne' - holds the constant $FFFFFFFF
 		clr.l	(a0)+
 		clr.l	(a0)+
 		bra.s	loc_FEFF0346
@@ -464,7 +468,7 @@ loc_FEFF0348:				; CODE XREF: ROM:FEFF0344j
 		bmi.s	loc_FEFF0340+2
 		cmpi.w	#1,d0
 		bgt.s	loc_FEFF0340+2
-		bne.s	loc_FEFF039E	; alternative screenbase
+		bne.s	loc_FEFF039E	
 		move.l	#$FEE08040,8(a2) ; screenbase
 		bra.s	loc_FEFF03A6
 ; ---------------------------------------------------------------------------
@@ -520,25 +524,28 @@ loc_FEFF03EE:				; CODE XREF: sub_FEFF03C2+20j
 
 ; =============== S U B	R O U T	I N E =======================================
 
+; This clears the screen to the 'grey' background, i.e.
+; 010101010101010101010...
+; 101010101010101010101...
 
-sub_FEFF03F8:				; CODE XREF: ROM:FEFF0272p
+sub_scrGrey:				; CODE XREF: ROM:FEFF0272p
 					; ROM:FEFF0296p
 		movem.l	d0-d2/a0,-(sp)
-		move.l	#$AAAAAAAA,d0	; filling the screen w/	patterns again
-		movea.l	2(a3),a0
+		move.l	#$AAAAAAAA,d0	; inital pattern
+		movea.l	2(a3),a0		; get screenbase (from variable this time)
 		move.w	#$155,d2
 
-loc_FEFF040A:				; CODE XREF: sub_FEFF03F8+1Ej
+scrGrey_line:				; CODE XREF: sub_scrGrey+1Ej
 		move.w	#$F,d1
 
-loc_FEFF040E:				; CODE XREF: sub_FEFF03F8+18j
+scrGrey_column:				; CODE XREF: sub_scrGrey+18j
 		move.l	d0,(a0)+
-		dbf	d1,loc_FEFF040E
+		dbf	d1,scrGrey_column
 		not.l	d0
-		dbf	d2,loc_FEFF040A
+		dbf	d2,scrGrey_line
 		movem.l	(sp)+,d0-d2/a0
 		rts
-; End of function sub_FEFF03F8
+; End of function sub_scrGrey
 
 ; ---------------------------------------------------------------------------
 
@@ -1031,38 +1038,38 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		movea.l	d1,a1
 		move.l	8(sp),d0
 		cmpi.l	#3,d0
-		bgt.s	loc_FEFF069A	; -100 (dec)
-		beq.s	loc_FEFF069E	; VIA1 base address (hardcoded,	bah!)
+		bgt.s	subVIA_exitErr	; -100 (dec)
+		beq.s	subVIA_OffOnB	; VIA1 base address (hardcoded,	bah!)
 		subq.w	#1,d0
-		beq.s	loc_FEFF06B0	; VIA1 base address (hardcoded,	bah!)
-		bmi.s	loc_FEFF06BA	; buffer A hardcoded - tztztz
+		beq.s	subVIA_setBaseB	; VIA1 base address (hardcoded,	bah!)
+		bmi.s	subVIA_setBaseAB	; buffer A hardcoded - tztztz
 		bclr	#6,($50F00000).l ; VIA1	base address (hardcoded, bah!)
 
-loc_FEFF0696:				; CODE XREF: ROM:FEFF06AEj
+subVIA_exit0:				; CODE XREF: ROM:FEFF06AEj
 					; ROM:FEFF06B8j
 		moveq	#0,d0
 
-locret_FEFF0698:			; CODE XREF: ROM:FEFF069Cj
+subVIA_exit:			; CODE XREF: ROM:FEFF069Cj
 		rts
 ; ---------------------------------------------------------------------------
 
-loc_FEFF069A:				; CODE XREF: ROM:FEFF0684j
-		moveq	#$FFFFFF9C,d0	; -100 (dec)
-		bra.s	locret_FEFF0698
+subVIA_exitErr:				; CODE XREF: ROM:FEFF0684j
+		moveq	#$FFFFFF9C,d0	; return -100 (dec)
+		bra.s	subVIA_exit		; and exit
 ; ---------------------------------------------------------------------------
 
-loc_FEFF069E:				; CODE XREF: ROM:FEFF0686j
+subVIA_OffOnB:				; CODE XREF: ROM:FEFF0686j
 		bset	#6,($50F00000).l ; VIA1	base address (hardcoded, bah!)
 		bclr	#6,($50F00000).l ; set & clear.	Does this flipflop mean	something?
-		bra.s	loc_FEFF0696
+		bra.s	subVIA_exit0
 ; ---------------------------------------------------------------------------
 
-loc_FEFF06B0:				; CODE XREF: ROM:FEFF068Aj
+subVIA_setBaseB:				; CODE XREF: ROM:FEFF068Aj
 		bset	#6,($50F00000).l ; VIA1	base address (hardcoded, bah!)
-		bra.s	loc_FEFF0696
+		bra.s	subVIA_exit0
 ; ---------------------------------------------------------------------------
 
-loc_FEFF06BA:				; CODE XREF: ROM:FEFF068Cj
+subVIA_setBaseAB:				; CODE XREF: ROM:FEFF068Cj
 		bset	#6,($50F01E00).l ; buffer A hardcoded -	tztztz
 		bset	#6,($50F00000).l
 		move.l	#$80,d0
