@@ -1,8 +1,18 @@
 
+; Disassembly of the Daystar Turbo 040 accelerator for several
+; vintage 68030 Apple Macintosh computers (II, IIx, IIci, SE/30 etc.)
+
+; Disassembled and commented by Axel Muhr - www.geekdot.com
+; v1.0 - initial version
+
+; This is ROM code expecting to 'live' at a static address.
+; It's also quite 'dirty' when using absolute addresses in the
+; OS-ROM, LoMem globals as well as it's own code. So be warned!
 
 ; Segment type:	Pure code
 ; segment "ROM"
 
+; --- this is all data: ----
 loc_0:					; DATA XREF: sub_169C+164o
 					; sub_18C4+36o	...
 		ori.b	#0,d6
@@ -13,7 +23,9 @@ loc_4:					; DATA XREF: ROM:0000640Ar
 loc_6:					; DATA XREF: sub_236:loc_262r
 					; sub_236+38w ...
 		ori.b	#$C8,a0
-		move	#$2700,sr
+		
+; --- This is where the code really starts		
+		move	#$2700,sr  ; Reset vector entry point
 
 loc_E:					; DATA XREF: sub_3500+DA4o
 		reset
@@ -27,37 +39,36 @@ loc_E:					; DATA XREF: sub_3500+DA4o
 loc_26:					; DATA XREF: sub_663Cw	ROM:000068B2r
 		bclr	#$1B,d0
 
-loc_2A:					; DATA XREF: sub_4D7C+16r sub_4D7C+24w ...
+loc_2A:						; We're checking ROM versions here
 		move.l	d0,($52800000).l
-		move.l	(a0),d2
-		move.l	4(a0),d4
+		move.l	(a0),d2		; A0  contains the start of system ROM.  D2 contains the checksum
+		move.l	4(a0),d4	; D4 contains the reset vector address
 		clr.w	d4
 		cmpi.l	#$FFFF,d4
-		bge.s	loc_66
-		cmpi.l	#$350EACF0,d2
+		bge.s	loc_66		   ; If the reset vector is in the form of 0000002A, check the checksum. 
+		                       ; otherwise, it is in the form of 4080002A and use the value here (with low word zeroed) in D4
+		cmpi.l	#$350EACF0,d2  ; LC checksum
 		beq.s	loc_60
-		cmpi.l	#$35C28F5F,d2
+		cmpi.l	#$35C28F5F,d2  ; LCII checksum
 		beq.s	loc_60
-		cmpi.l	#$35C28C8F,d2
+		cmpi.l	#$35C28C8F,d2  ; Unknown checksum
 		beq.s	loc_60
-		move.l	#$40800000,d4
-		bra.s	loc_66
+		move.l	#$40800000,d4  ; If none of the above checksums match, it ROM is supposed to be at 40800000
 ; ---------------------------------------------------------------------------
 
 loc_60:					; CODE XREF: ROM:00000046j
-					; ROM:0000004Ej ...
-		move.l	#$40A00000,d4
+		move.l	#$40A00000,d4  ; One of the above checksums matched, ROM is at 40A00000. Address of system ROM is in D4
 
 loc_66:					; CODE XREF: ROM:0000003Ej
 					; ROM:0000005Ej
-		move.b	#$3F,($50F00600).l ; '?'
-		move.l	(d4.l),d7
-		lea	$7A,a3
+		move.b	#$3F,($50F00600).l ; VIA1 Reg A Direction - Setting bits 0-5 as outputs.
+		move.l	(d4.l),d7		   ; Checksum is now in D7
+		lea	$7A,a3				; Return to A3
 		jmp	loc_B8
 ; ---------------------------------------------------------------------------
 
 loc_7A:					; DATA XREF: ROM:00000072o
-		move.l	d4,(loc_2AC+2).w
+		move.l	d4,(loc_2AC+2).w  ; (ROMBase)
 
 loc_7E:					; DATA XREF: sub_784+22o sub_784+8Eo
 		lea	$86,a6
@@ -90,7 +101,7 @@ loc_B2:					; CODE XREF: ROM:000000A6j ROM:loc_B2j
 		nop
 
 loc_B8:					; CODE XREF: ROM:00000076j
-		lea	$4FE,a0
+		lea	$4FE,a0		; something in the trap dispatch table?
 		move.l	(a0)+,d0
 
 loc_BE:					; CODE XREF: ROM:000000CAj
@@ -2535,9 +2546,9 @@ arg_14		=  $1C
 		move.l	d6,-(sp)
 		jsr	sub_236
 		move.l	d0,d5
-		pea	var_4F0(a6)
-		move.l	d7,-(sp)
-		jsr	sub_1ABC
+		pea	var_4F0(a6)		; Address onto stack
+		move.l	d7,-(sp)  	; and arg_0
+		jsr	sub_buildMachTbl		; call "build machine-table" sub
 		move.w	d7,var_510+2(a6)
 		move.l	d5,-(sp)
 		pea	var_20(a6)
@@ -3436,16 +3447,22 @@ sub_1AAE:				; CODE XREF: ROM:00000088p
 
 ; Attributes: bp-based frame
 
-sub_1ABC:				; CODE XREF: sub_130E+2Ep
+; This is most likely a switch-case through Gestalt-codes 
+; and then filling a machine-specific table with what looks likely
+; NuBUS slot top-bottom adresses and VRAM locations (if available).
+; Officially the Mac II, IIx, IIcx, IIci, IIsi, IIvi, IIvx, and SE/30 
+; were supported
 
-arg_0		=  8
-arg_4		=  $C
+sub_buildMachTbl:				; CODE XREF: sub_130E+2Ep
+
+arg_0		=  8	; Gestalt-code?
+arg_4		=  $C	; Address of ???
 
 		link	a6,#0
 		movea.l	arg_4(a6),a1
 		move.l	arg_0(a6),d0
 		move.l	d0,(a1)
-		beq.w	loc_1B68
+		beq.w	loc_1B68	; most likely Mac II, IIx, IIcx and ???
 		subq.l	#1,d0
 		beq.w	loc_1B68
 		subq.l	#1,d0
@@ -3453,65 +3470,65 @@ arg_4		=  $C
 		subq.l	#1,d0
 		beq.w	loc_1B68
 		subq.l	#2,d0
-		beq.s	loc_1B38
+		beq.s	IIci_MachTbl ; IIci (11)
 		subq.l	#7,d0
-		beq.s	loc_1B06
+		beq.s	se30_MachTbl ; SE/30 (9 - does not make sense: 11-7=4)
 		subq.l	#1,d0
 		beq.s	loc_1B68
-		subi.l	#$19,d0
-		beq.w	loc_1B94
+		subi.l	#$19,d0	 ; = 25
+		beq.w	loc_1B94 ; IIsi, IIvi, IIvx, Performa 600 (18, 48, 44, 45)
 		subq.l	#1,d0
-		beq.w	loc_1B94
+		beq.w	loc_1B94 ; one of the above
 		subq.l	#3,d0
-		beq.w	loc_1B94
-		bra.w	loc_1BC4
+		beq.w	loc_1B94 ; and another one
+		bra.w	zero_MachTbl
 ; ---------------------------------------------------------------------------
 
-loc_1B06:				; CODE XREF: sub_1ABC+2Aj
-		move.l	#$F9000000,4(a1)
-		move.l	#$FBFFFFFF,8(a1)
-		move.l	#$90000000,$C(a1)
-		move.l	#$BFFFFFFF,$10(a1)
+se30_MachTbl:				
+		move.l	#$F9000000,4(a1)	; Beginning Slot #9 space
+		move.l	#$FBFFFFFF,8(a1)	; End of Slot #B space
+		move.l	#$90000000,$C(a1)	; Superslot-space start
+		move.l	#$BFFFFFFF,$10(a1)	; Superslot-space end
 		moveq	#1,d0
-		move.l	d0,$14(a1)
-		move.l	#$FEE00000,$18(a1)
-		bra.w	loc_1BDA
+		move.l	d0,$14(a1)			; this is zero, meaning?
+		move.l	#$FEE00000,$18(a1)	; Video RAM SE/30
+		bra.w	exit_buildMachTbl
 ; ---------------------------------------------------------------------------
 
-loc_1B38:				; CODE XREF: sub_1ABC+26j
+IIci_MachTbl:				
 		move.l	#$F9000000,4(a1)
 		move.l	#$FEFFFFFF,8(a1)
 		move.l	#$C0000000,$C(a1)
 		move.l	#$EFFFFFFF,$10(a1)
 		moveq	#1,d0
 		move.l	d0,$14(a1)
-		move.l	#$FBB00000,$18(a1)
-		bra.s	loc_1BDA
+		move.l	#$FBB00000,$18(a1)  ; Video RAM IIci
+		bra.s	exit_buildMachTbl
 ; ---------------------------------------------------------------------------
 
-loc_1B68:				; CODE XREF: sub_1ABC+Ej sub_1ABC+14j	...
+loc_1B68:				
 		move.l	#$F9000000,4(a1)
 		move.l	#$90000000,$C(a1)
 		move.l	#$FEFFFFFF,8(a1)
 		move.l	#$EFFFFFFF,$10(a1)
 		moveq	#0,d0
 		move.l	d0,$14(a1)
-		move.l	d0,$18(a1)
-		bra.s	loc_1BDA
+		move.l	d0,$18(a1)		; No on-board video
+		bra.s	exit_buildMachTbl
 ; ---------------------------------------------------------------------------
 
-loc_1B94:				; CODE XREF: sub_1ABC+36j sub_1ABC+3Cj ...
+loc_1B94:				
 		move.l	#$F9000000,4(a1)
 		move.l	#$FBFFFFFF,8(a1)
 		move.l	#$90000000,$C(a1)
 		move.l	#$BFFFFFFF,$10(a1)
 		moveq	#0,d0
 		move.l	d0,$14(a1)
-		move.l	#$60B00000,$18(a1)
-		bra.s	loc_1BDA
+		move.l	#$60B00000,$18(a1) ; Video RAM IIsi, IIvi, IIvx, Performa 600
+		bra.s	exit_buildMachTbl
 ; ---------------------------------------------------------------------------
 
-loc_1BC4:				; CODE XREF: sub_1ABC+46j
+zero_MachTbl:				
 		moveq	#0,d0
 		move.l	d0,$14(a1)
 		move.l	d0,$10(a1)
@@ -3519,10 +3536,10 @@ loc_1BC4:				; CODE XREF: sub_1ABC+46j
 		move.l	d0,8(a1)
 		move.l	d0,4(a1)
 
-loc_1BDA:				; CODE XREF: sub_1ABC+78j sub_1ABC+AAj ...
+exit_buildMachTbl:				
 		unlk	a6
 		rts
-; End of function sub_1ABC
+; End of function sub_buildMachTbl
 
 
 ; =============== S U B	R O U T	I N E =======================================
