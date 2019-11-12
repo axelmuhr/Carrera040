@@ -502,18 +502,18 @@ sub_FEFF03C2:				; CODE XREF: ROM:FEFF020Ep
 					; ROM:FEFF0268p ...
 		movem.l	d0/a0,-(sp)
 		movea.l	($1D4).w,a0 ; VIA base
-		bset	#6,$600(a0)
-		adda.w	#$1E00,a0
+		bset	#6,$600(a0) ; set 6th bit of vDIRA to output
+		adda.w	#$1E00,a0 	; BufferA (switch to main screen)
 		move.w	d0,(a3)
 		beq.s	loc_FEFF03E4
-		bclr	#6,(a0)
+		bclr	#6,(a0)		; clear 6th bit of BufferA
 		move.l	#$FEE00040,d0	; alternative screenbase
 		bra.s	loc_FEFF03EE
 ; ---------------------------------------------------------------------------
 
 loc_FEFF03E4:				; CODE XREF: sub_FEFF03C2+14j
-		bset	#6,(a0)
-		move.l	#$FEE08040,d0
+		bset	#6,(a0)		; clear 6th bit of BufferA
+		move.l	#$FEE08040,d0  ; main screenbase
 
 loc_FEFF03EE:				; CODE XREF: sub_FEFF03C2+20j
 		move.l	d0,2(a3)
