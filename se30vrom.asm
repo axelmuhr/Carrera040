@@ -39,7 +39,7 @@
 		dc.b $24
 		dc.b   0		; \
 		dc.b   0		;  - Primary init 0x0000C0
-		dc.b $C0 ; ¿		; /
+		dc.b $C0 ; ÔøΩ		; /
 		dc.l $FF000000		; end of sRessource
 		dc.b   0
 		dc.b   1
@@ -159,10 +159,10 @@ aMacse301_0:	dc.b 'MacSE/30-1.0',0
 		dc.b   0
 		dc.b   0
 		dc.b $64 ; d
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b   5
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b $FF
 		dc.b   0
 		dc.b   0
@@ -191,10 +191,10 @@ aMacse301_0:	dc.b 'MacSE/30-1.0',0
 		dc.b   0
 		dc.b   0
 		dc.b $44 ; D
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b   5
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b $FF
 		dc.b   0
 		dc.b   0
@@ -224,7 +224,7 @@ aDisplay_video_:dc.b 'Display_Video_Apple_MacSE/30 Video',0
 		dc.b   0
 		dc.b   0
 		dc.b $D5
-		dc.b $C0 ; ¿
+		dc.b $C0 ; ÔøΩ
 		dc.b 2
 		dc.b   0
 		dc.b   0
@@ -236,7 +236,7 @@ aDisplay_video_:dc.b 'Display_Video_Apple_MacSE/30 Video',0
 		dc.b   0
 		dc.b   0
 		dc.b   4
-		dc.b $B4 ; ¥
+		dc.b $B4 ; ÔøΩ
 		dc.b $4C ; L
 		dc.b   0
 		dc.b   0
@@ -498,12 +498,11 @@ loc_FEFF03BC:				; CODE XREF: ROM:FEFF03B8j
 ; =============== S U B	R O U T	I N E =======================================
 
 
-sub_FEFF03C2:				; CODE XREF: ROM:FEFF020Ep
-					; ROM:FEFF0268p ...
+sub_FEFF03C2:				
 		movem.l	d0/a0,-(sp)
 		movea.l	($1D4).w,a0 ; VIA base
 		bset	#6,$600(a0) ; set 6th bit of vDIRA to output
-		adda.w	#$1E00,a0 	; BufferA (switch to main screen)
+		adda.w	#$1E00,a0 	; "hard-change" pointer to VIA1 adding the offset 0x1E00
 		move.w	d0,(a3)
 		beq.s	loc_FEFF03E4
 		bclr	#6,(a0)		; clear 6th bit of BufferA
@@ -511,11 +510,11 @@ sub_FEFF03C2:				; CODE XREF: ROM:FEFF020Ep
 		bra.s	loc_FEFF03EE
 ; ---------------------------------------------------------------------------
 
-loc_FEFF03E4:				; CODE XREF: sub_FEFF03C2+14j
-		bset	#6,(a0)		; clear 6th bit of BufferA
+loc_FEFF03E4:				
+		bset	#6,(a0)		; set 6th bit of BufferA
 		move.l	#$FEE08040,d0  ; main screenbase
 
-loc_FEFF03EE:				; CODE XREF: sub_FEFF03C2+20j
+loc_FEFF03EE:				
 		move.l	d0,2(a3)
 		movem.l	(sp)+,d0/a0
 		rts
@@ -588,14 +587,14 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   0
 		dc.b $7F
 		dc.b $FF
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b $80
 		dc.b   0
 		dc.b $40
 		dc.b   0
-		dc.b $9F ; ü
-		dc.b $FE ; ˛
+		dc.b $9F ; ÔøΩ
+		dc.b $FE ; ÔøΩ
 		dc.b $40
 		dc.b   0
 		dc.b $A0
@@ -629,24 +628,24 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   1
 		dc.b $40
 		dc.b $40 ; @
-		dc.b $9F ; ü
-		dc.b $FE ; ˛
+		dc.b $9F ; ÔøΩ
+		dc.b $FE ; ÔøΩ
 		dc.b $40 ; @
 		dc.b $40 ; @
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b $41 ; A
-		dc.b $F0 ; 
-		dc.b $80 ; Ä
+		dc.b $F0 ; ÔøΩ
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b $40 ; @
-		dc.b $E0 ; ‡
-		dc.b $80 ; Ä
+		dc.b $E0 ; ÔøΩ
+		dc.b $80 ; ÔøΩ
 		dc.b   0
 		dc.b $40
 		dc.b $40 ; @
-		dc.b $80 ; Ä
-		dc.b $FE ; ˛
+		dc.b $80 ; ÔøΩ
+		dc.b $FE ; ÔøΩ
 		dc.b $40 ; @
 		dc.b   0
 		dc.b $80
@@ -661,10 +660,10 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b $80
 		dc.b   0
 		dc.b $53
-		dc.b $F9 ; ˘
+		dc.b $F9 ; ÔøΩ
 		dc.b $7F ; 
 		dc.b $FF
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   1
 		dc.b $40
 		dc.b   0
@@ -672,7 +671,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   1
 		dc.b $7F
 		dc.b $FF
-		dc.b $9F ; ü
+		dc.b $9F ; ÔøΩ
 		dc.b $FF
 		dc.b   0
 		dc.b   0
@@ -754,7 +753,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   8
 		dc.b   0
 		dc.b   0
@@ -770,51 +769,51 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b $55 ; U
 		dc.b $50 ; P
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b $55 ; U
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
-		dc.b   9
-		dc.b $50 ; P
-		dc.b   0
-		dc.b $90 ; ê
-		dc.b   9
-		dc.b   0
-		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b $50 ; P
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
+		dc.b   9
+		dc.b $50 ; P
+		dc.b   0
+		dc.b $90 ; ÔøΩ
+		dc.b   9
+		dc.b   0
+		dc.b   0
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b $54 ; T
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   9
 		dc.b   0
 		dc.b   0
-		dc.b $90 ; ê
+		dc.b $90 ; ÔøΩ
 		dc.b   8
 		dc.b $FF
 		dc.b $FF
@@ -840,7 +839,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   0
 		dc.b $10
 		dc.b   8
-		dc.b $FC ; ¸
+		dc.b $FC ; ÔøΩ
 		dc.b $FF
 		dc.b $10
 		dc.l $8180010
@@ -855,7 +854,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b 4
 		dc.b   0
 		dc.b   0
@@ -871,7 +870,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   3
 		dc.b $FF
 		dc.b $FF
-		dc.b $C0 ; ¿
+		dc.b $C0 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
@@ -879,127 +878,127 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   7
 		dc.b $FF
 		dc.b $FF
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   3
 		dc.b $FF
 		dc.b $FF
-		dc.b $C0 ; ¿
+		dc.b $C0 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   3
@@ -1031,7 +1030,7 @@ dword_FEFF0444:	dc.l $D010E		; DATA XREF: ROM:FEFF01E8o
 		dc.b 0
 		dc.b   0
 		dc.b   0
-		dc.b $F0 ; 
+		dc.b $F0 ; ÔøΩ
 ; ---------------------------------------------------------------------------
 		or.b	7(sp),d1
 		ror.l	#8,d1
@@ -1099,7 +1098,7 @@ subVIA_setBaseAB:				; CODE XREF: ROM:FEFF068Cj
 		dc.b $2E ; .
 		dc.b   0
 		dc.b   0
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b $40 ; @
 		dc.b   0
 		dc.b $40 ; @
@@ -3468,21 +3467,21 @@ dword_FEFF105A:	dc.l $4600007		; DATA XREF: ROM:FEFF1028o
 		dc.b   1
 		dc.b $4F ; O
 		dc.b   0
-		dc.b $F1 ; Ò
+		dc.b $F1 ; ÔøΩ
 		dc.b $11
 		dc.b   1
 		dc.b $A0
 		dc.b   0
 		dc.b $82
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b 0
-		dc.b $8C ; å
-		dc.b $A0 ; †
+		dc.b $8C ; ÔøΩ
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $8C ; å
-		dc.b $A1 ; °
+		dc.b $8C ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b 0
-		dc.b $96 ; ñ
+		dc.b $96 ; ÔøΩ
 		dc.b   0
 		dc.b   6
 		dc.b   5
@@ -3491,7 +3490,7 @@ dword_FEFF105A:	dc.l $4600007		; DATA XREF: ROM:FEFF1028o
 		dc.b   0
 		dc.b   2
 		dc.b   5
-		dc.b $A1 ; °
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
 		dc.b $9A
 		dc.b   0
@@ -3504,9 +3503,9 @@ dword_FEFF105A:	dc.l $4600007		; DATA XREF: ROM:FEFF1028o
 		dc.b $71 ; q
 		dc.b   0
 		dc.b 0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b   1
 		dc.b   0
 		dc.b $A
@@ -3517,7 +3516,7 @@ dword_FEFF105A:	dc.l $4600007		; DATA XREF: ROM:FEFF1028o
 		dc.b   1
 		dc.b $4F
 		dc.b   0
-		dc.b $F1 ; Ò
+		dc.b $F1 ; ÔøΩ
 		dc.b  $D
 		dc.b 0
 		dc.b  $C
@@ -3525,7 +3524,7 @@ dword_FEFF105A:	dc.l $4600007		; DATA XREF: ROM:FEFF1028o
 		dc.b  $B
 		dc.b $18
 		dc.b $16
-aMacSe30Enginee:dc.b 'Mac SE/30 Engineering',$D,'†',0
+aMacSe30Enginee:dc.b 'Mac SE/30 Engineering',$D,'ÔøΩ',0
 		dc.w $99A1
 		dc.w $9A
 		dc.w 8
@@ -3538,11 +3537,11 @@ aMacSe30Enginee:dc.b 'Mac SE/30 Engineering',$D,'†',0
 		dc.b $2A ; *
 		dc.b $10
 		dc.b  $D
-aHallOfFameA:	dc.b 'Hall of Fame',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aHallOfFameA:	dc.b 'Hall of Fame',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3553,19 +3552,19 @@ aHallOfFameA:	dc.b 'Hall of Fame',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b   1
 		dc.b  $D
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3576,17 +3575,17 @@ aHallOfFameA:	dc.b 'Hall of Fame',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1D
-aVideoSoftwareB:dc.b 'Video Software by David Fung',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aVideoSoftwareB:dc.b 'Video Software by David Fung',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3597,17 +3596,17 @@ aVideoSoftwareB:dc.b 'Video Software by David Fung',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1F
-aCpuSoftwareByB:dc.b 'CPU Software by Bob Herold and',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aCpuSoftwareByB:dc.b 'CPU Software by Bob Herold and',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3618,9 +3617,9 @@ aCpuSoftwareByB:dc.b 'CPU Software by Bob Herold and',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $22 ; "
@@ -3630,11 +3629,11 @@ aCpuSoftwareByB:dc.b 'CPU Software by Bob Herold and',$D,'†',0
 		dc.b $20
 		dc.b $20
 		dc.b $20
-aTheOriginalCas:dc.b 'the original cast of System',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aTheOriginalCas:dc.b 'the original cast of System',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3645,9 +3644,9 @@ aTheOriginalCas:dc.b 'the original cast of System',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b  $F
@@ -3657,11 +3656,11 @@ aTheOriginalCas:dc.b 'the original cast of System',$D,'†',0
 		dc.b $20
 		dc.b $20
 		dc.b $20
-aSoftwareA:	dc.b 'Software',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aSoftwareA:	dc.b 'Software',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3672,17 +3671,17 @@ aSoftwareA:	dc.b 'Software',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $21 ; !
-aAUxBuddiesWere:dc.b 'A/UX buddies were Rick Daley and',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aAUxBuddiesWere:dc.b 'A/UX buddies were Rick Daley and',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3693,9 +3692,9 @@ aAUxBuddiesWere:dc.b 'A/UX buddies were Rick Daley and',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $13
@@ -3705,11 +3704,11 @@ aAUxBuddiesWere:dc.b 'A/UX buddies were Rick Daley and',$D,'†',0
 		dc.b $20
 		dc.b $20
 		dc.b $20
-aErykVershenA:	dc.b 'Eryk Vershen',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aErykVershenA:	dc.b 'Eryk Vershen',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b   0
@@ -3720,160 +3719,160 @@ aErykVershenA:	dc.b 'Eryk Vershen',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1C
-aSqaTeamLedBySt:dc.b 'SQA Team led by Steve Yaste',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aSqaTeamLedBySt:dc.b 'SQA Team led by Steve Yaste',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $F4 ; Ù
+		dc.b $F4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1B
-aScmReleasesByW:dc.b 'SCM releases by Wanshu Kuo',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aScmReleasesByW:dc.b 'SCM releases by Wanshu Kuo',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $E4 ; ‰
+		dc.b $E4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b   1
 		dc.b  $D
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $D4 ; ‘
+		dc.b $D4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1A
-aHardwareByJimS:dc.b 'Hardware by Jim Stockdale',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aHardwareByJimS:dc.b 'Hardware by Jim Stockdale',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $C4 ; ƒ
+		dc.b $C4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $21 ; !
-aRalphPastorKep:dc.b 'Ralph Pastor kept it all running',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aRalphPastorKep:dc.b 'Ralph Pastor kept it all running',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $B4 ; ¥
+		dc.b $B4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b   1
 		dc.b  $D
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $A4 ; §
+		dc.b $A4 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1D
-aProjectManager:dc.b 'Project Manager (and Chinese',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aProjectManager:dc.b 'Project Manager (and Chinese',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $94 ; î
+		dc.b $94 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1F
@@ -3881,32 +3880,32 @@ aProjectManager:dc.b 'Project Manager (and Chinese',$D,'†',0
 		dc.b $20
 		dc.b $20
 		dc.b $20
-aCharacterWasH_:dc.b 'character) was H.L. Cheung',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aCharacterWasH_:dc.b 'character) was H.L. Cheung',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
-		dc.b $84 ; Ñ
+		dc.b $84 ; ÔøΩ
 		dc.b   0
 		dc.b   0
 		dc.b   0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1A
-aProjectTeamLed:dc.b 'Project team led by Mike ',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aProjectTeamLed:dc.b 'Project team led by Mike ',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
@@ -3917,9 +3916,9 @@ aProjectTeamLed:dc.b 'Project team led by Mike ',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b  $D
@@ -3927,11 +3926,11 @@ aProjectTeamLed:dc.b 'Project team led by Mike ',$D,'†',0
 		dc.b $20
 		dc.b $20
 		dc.b $20
-aDelacruzA:	dc.b 'DeLaCruz',$D,'†',0
-		dc.b $99 ; ô
-		dc.b $A1 ; °
+aDelacruzA:	dc.b 'DeLaCruz',$D,'ÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A1 ; ÔøΩ
 		dc.b   0
-		dc.b $9A ; ö
+		dc.b $9A ; ÔøΩ
 		dc.b   0
 		dc.b   8
 		dc.b $FF
@@ -3942,17 +3941,17 @@ aDelacruzA:	dc.b 'DeLaCruz',$D,'†',0
 		dc.b $71 ; q
 		dc.b   0
 		dc.b   0
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $98 ; ò
+		dc.b $98 ; ÔøΩ
 		dc.b $2A ; *
 		dc.b $10
 		dc.b $1D
-aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
-		dc.b $99 ; ô
-		dc.b $A0 ; †
+aProjectSanityB:dc.b 'Project sanity by Donna KeyesÔøΩ',0
+		dc.b $99 ; ÔøΩ
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $97 ; ó
+		dc.b $97 ; ÔøΩ
 		dc.b $20
 		dc.b   0
 		dc.b $32 ; 2
@@ -3961,37 +3960,37 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b   0
 		dc.b $32 ; 2
 		dc.b   0
-		dc.b $EB ; Î
-		dc.b $A0 ; †
+		dc.b $EB ; ÔøΩ
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $8D ; ç
-		dc.b $90 ; ê
+		dc.b $8D ; ÔøΩ
+		dc.b $90 ; ÔøΩ
 		dc.b   0
 		dc.b   4
 		dc.b   1
-		dc.b $9B ; õ
+		dc.b $9B ; ÔøΩ
 		dc.b   0
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   1
-		dc.b $BE ; æ
+		dc.b $BE ; ÔøΩ
 		dc.b   1
 		dc.b   0
 		dc.b   1
-		dc.b $9B ; õ
+		dc.b $9B ; ÔøΩ
 		dc.b   0
-		dc.b $E0 ; ‡
+		dc.b $E0 ; ÔøΩ
 		dc.b   1
-		dc.b $BE ; æ
+		dc.b $BE ; ÔøΩ
 		dc.b   0
-		dc.b $FC ; ¸
+		dc.b $FC ; ÔøΩ
 		dc.b   0
 		dc.b  $A
 		dc.b   0
-		dc.b $C0 ; ¿
+		dc.b $C0 ; ÔøΩ
 		dc.b   0
 		dc.b $2D ; -
 		dc.b   0
-		dc.b $DC ; ‹
+		dc.b $DC ; ÔøΩ
 		dc.b   0
 		dc.b   1
 		dc.b   0
@@ -4005,7 +4004,7 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b $1F
 		dc.b $FF
 		dc.b $FF
-		dc.b $82 ; Ç
+		dc.b $82 ; ÔøΩ
 		dc.b $20
 		dc.b   0
 		dc.b   0
@@ -4016,7 +4015,7 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b $46 ; F
 		dc.b $23 ; #
 		dc.b $FF
-		dc.b $FC ; ¸
+		dc.b $FC ; ÔøΩ
 		dc.b $4E ; N
 		dc.b $24 ; $
 		dc.b   0
@@ -4068,7 +4067,7 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b $41 ; A
 		dc.b $23 ; #
 		dc.b $FF
-		dc.b $FC ; ¸
+		dc.b $FC ; ÔøΩ
 		dc.b $4A ; J
 		dc.b $20
 		dc.b   0
@@ -4092,7 +4091,7 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b $47 ; G
 		dc.b $20
 		dc.b   3
-		dc.b $FC ; ¸
+		dc.b $FC ; ÔøΩ
 		dc.b $4E ; N
 		dc.b $20
 		dc.b   0
@@ -4109,19 +4108,19 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b $1F
 		dc.b $FF
 		dc.b $FF
-		dc.b $8E ; é
+		dc.b $8E ; ÔøΩ
 		dc.b $10
 		dc.b   0
 		dc.b   0
-		dc.b $8D ; ç
+		dc.b $8D ; ÔøΩ
 		dc.b $10
 		dc.b   0
 		dc.b   0
-		dc.b $84 ; Ñ
+		dc.b $84 ; ÔøΩ
 		dc.b $10
 		dc.b   0
 		dc.b   0
-		dc.b $80 ; Ä
+		dc.b $80 ; ÔøΩ
 		dc.b  $F
 		dc.b $FF
 		dc.b $FF
@@ -4134,12 +4133,12 @@ aProjectSanityB:dc.b 'Project sanity by Donna Keyes†',0
 		dc.b   0
 		dc.b   0
 		dc.b   5
-		dc.b $A0 ; †
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $8D ; ç
-		dc.b $A0 ; †
+		dc.b $8D ; ÔøΩ
+		dc.b $A0 ; ÔøΩ
 		dc.b   0
-		dc.b $83 ; É
+		dc.b $83 ; ÔøΩ
 		dc.b $FF
 		dc.b   0
 		dc.b   0
